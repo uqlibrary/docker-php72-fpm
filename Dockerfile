@@ -1,7 +1,7 @@
 FROM uqlibrary/alpine:3.8
 
 ENV COMPOSER_VERSION=1.4.1
-ENV XDEBUG_VERSION=2.5.3
+ENV XDEBUG_VERSION=2.6.0
 ENV BUILD_DEPS autoconf make g++ gcc groff less
 
 COPY ./fs/docker-entrypoint.sh /usr/sbin/docker-entrypoint.sh
