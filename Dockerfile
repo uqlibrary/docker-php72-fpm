@@ -1,6 +1,6 @@
 FROM uqlibrary/alpine:3.8
 
-ENV COMPOSER_VERSION=1.4.1
+ENV COMPOSER_VERSION=1.6.5
 ENV XDEBUG_VERSION=2.6.0
 ENV BUILD_DEPS autoconf make g++ gcc groff less
 
@@ -28,7 +28,7 @@ RUN apk add --upgrade --no-cache \
 
     # Composer
     && curl -sS https://getcomposer.org/installer | php7 -- --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
-    && composer global require "hirak/prestissimo:0.3.5" \
+    && composer global require "hirak/prestissimo:0.3.7" \
 
     # Remove build deps
     && rm -rf /var/cache/apk/* \
