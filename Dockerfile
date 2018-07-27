@@ -2,10 +2,12 @@ FROM uqlibrary/alpine:3.8
 
 ENV COMPOSER_VERSION=1.6.5
 ENV XDEBUG_VERSION=2.7.0alpha1
+ENV NEWRELIC_VERSION=8.1.0.209
+ENV NR_INSTALL_SILENT=1
+ENV NR_INSTALL_PHPLIST=/usr/bin
 ENV BUILD_DEPS autoconf make g++ gcc groff less file re2c
 
 COPY ./fs/docker-entrypoint.sh /usr/sbin/docker-entrypoint.sh
-COPY ./fs/newrelic-install.sh /usr/sbin/newrelic-install.sh
 
 RUN apk add --upgrade --no-cache \
     # Required deps
@@ -30,13 +32,20 @@ RUN apk add --upgrade --no-cache \
     && curl -sS https://getcomposer.org/installer | php7 -- --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
     && composer global require "hirak/prestissimo:0.3.7" \
     #
+    # NewRelic (disabled by default)
+    && cd /opt \
+    && wget -q https://download.newrelic.com/php_agent/archive/${NEWRELIC_VERSION}/newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz \
+    && tar -zxf newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz \
+    && rm -f newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz
+    && ./newrelic-php5-${NEWRELIC_VERSION}-linux-musl/newrelic-install install \
+    && mv /etc/php7/conf.d/newrelic.ini /etc/newrelic.ini \
+    #
     # Remove build deps
     && rm -rf /var/cache/apk/* \
     && apk del --purge .build-deps \
     #
     # Make scripts executable
-    && chmod +x /usr/sbin/docker-entrypoint.sh \
-    && chmod +x /usr/sbin/newrelic-install.sh
+    && chmod +x /usr/sbin/docker-entrypoint.sh
 
 ADD fs /
 
