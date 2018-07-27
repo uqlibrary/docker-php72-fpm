@@ -33,7 +33,7 @@ RUN apk add --upgrade --no-cache \
     && composer global require "hirak/prestissimo:0.3.7" \
     #
     # NewRelic (disabled by default)
-    && cd /opt \
+    && mkdir /opt && cd /opt \
     && wget -q https://download.newrelic.com/php_agent/archive/${NEWRELIC_VERSION}/newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz \
     && tar -zxf newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz \
     && rm -f newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz \
