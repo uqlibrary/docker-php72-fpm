@@ -36,7 +36,7 @@ RUN apk add --upgrade --no-cache \
     && cd /opt \
     && wget -q https://download.newrelic.com/php_agent/archive/${NEWRELIC_VERSION}/newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz \
     && tar -zxf newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz \
-    && rm -f newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz
+    && rm -f newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz \
     && ./newrelic-php5-${NEWRELIC_VERSION}-linux-musl/newrelic-install install \
     && mv /etc/php7/conf.d/newrelic.ini /etc/newrelic.ini \
     #
