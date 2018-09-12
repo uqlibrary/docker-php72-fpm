@@ -2,6 +2,7 @@ FROM uqlibrary/alpine:3.8
 
 ENV COMPOSER_VERSION=1.6.5
 ENV XDEBUG_VERSION=2.7.0alpha1
+ENV IGBINARY_VERSION=2.0.7
 ENV NEWRELIC_VERSION=8.1.0.209
 ENV NR_INSTALL_SILENT=1
 ENV NR_INSTALL_PHPLIST=/usr/bin
@@ -21,10 +22,17 @@ RUN apk add --upgrade --no-cache \
     && apk add --no-cache --virtual .build-deps $BUILD_DEPS \
     #
     # XDebug
-    && cd /tmp && wget https://xdebug.org/files/xdebug-${XDEBUG_VERSION}.tgz \
+    && cd /tmp && wget -q https://xdebug.org/files/xdebug-${XDEBUG_VERSION}.tgz \
     && tar -zxvf xdebug-${XDEBUG_VERSION}.tgz \
     && cd xdebug-${XDEBUG_VERSION} && phpize \
     && ./configure --enable-xdebug && make && make install \
+    #
+    # igbinary
+    && cd /tmp && wget -q https://github.com/igbinary/igbinary/releases/download/${IGBINARY_VERSION}/igbinary-${IGBINARY_VERSION}.tgz \
+    && tar -zxvf igbinary-${IGBINARY_VERSION}.tgz \
+    && cd igbinary-${IGBINARY_VERSION} && phpize \
+    && ./configure CFLAGS="-O2 -g" --enable-igbinary && make && make install \
+    && echo 'extension=igbinary.so' >> /etc/php7/conf.d/igbinary.ini \
     && cd \
     && rm -rf /tmp/* \
     #
