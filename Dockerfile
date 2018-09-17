@@ -16,7 +16,7 @@ RUN apk upgrade --update --no-cache && \
     ca-certificates \
     curl \
     bash \
-    git sqlite mysql-client
+    git sqlite mysql-client libmemcached
 
 RUN apk add --update --no-cache \
         php7-session php7-mcrypt php7-soap php7-openssl php7-gmp php7-pdo_odbc php7-json php7-dom php7-pdo php7-zip \
