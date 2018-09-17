@@ -4,20 +4,26 @@ ENV COMPOSER_VERSION=1.6.5
 ENV XDEBUG_VERSION=2.7.0alpha1
 ENV IGBINARY_VERSION=2.0.7
 ENV NEWRELIC_VERSION=8.1.0.209
+ENV PHP_MEMCACHED_VERSION=3.0.4
 ENV NR_INSTALL_SILENT=1
 ENV NR_INSTALL_PHPLIST=/usr/bin
-ENV BUILD_DEPS autoconf make g++ gcc groff less file re2c
+ENV BUILD_DEPS file re2c autoconf make g++ gcc groff less php7-dev libmemcached-dev cyrus-sasl-dev zlib-dev musl pcre-dev
 
 COPY ./fs/docker-entrypoint.sh /usr/sbin/docker-entrypoint.sh
 
-RUN apk add --upgrade --no-cache \
-    # Required deps
-    php7 php7-ctype php7-curl php7-json php7-mysqli php7-dom php7-sockets \
-    php7-mbstring php7-opcache php7-openssl php7-pdo_mysql php7-pdo_sqlite \
-    php7-xmlwriter php7-phar php7-session php7-xml php7-mcrypt php7-intl \
-    php7-zip php7-zlib php7-fpm php7-dev php7-pear php7-memcached php7-soap \
-    php7-simplexml php7-tokenizer php7-gd php7-ldap php7-iconv php7-xmlreader php7-fileinfo \
-    git sqlite mysql-client \
+RUN apk upgrade --update --no-cache && \
+    apk add --update --no-cache \
+    ca-certificates \
+    curl \
+    bash \
+    git sqlite mysql-client
+
+RUN apk add --update --no-cache \
+        php7-session php7-mcrypt php7-soap php7-openssl php7-gmp php7-pdo_odbc php7-json php7-dom php7-pdo php7-zip \
+        php7-mysqli php7-sqlite3 php7-pdo_pgsql php7-bcmath php7-gd php7-odbc php7-pdo_mysql php7-pdo_sqlite \
+        php7-gettext php7-xmlreader php7-xmlwriter php7-xmlrpc php7-xml php7-simplexml php7-bz2 php7-iconv \
+        php7-pdo_dblib php7-curl php7-ctype php7-pcntl php7-posix php7-phar php7-opcache php7-mbstring php7-zlib \
+        php7-fileinfo php7-tokenizer php7-sockets php7-phar php7-intl php7-pear php7-ldap php7-fpm php7 \
     #
     # Build deps
     && apk add --no-cache --virtual .build-deps $BUILD_DEPS \
@@ -34,6 +40,12 @@ RUN apk add --upgrade --no-cache \
     && cd igbinary-${IGBINARY_VERSION} && phpize \
     && ./configure CFLAGS="-O2 -g" --enable-igbinary && make && make install \
     && echo 'extension=igbinary.so' >> /etc/php7/conf.d/igbinary.ini \
+    # memcache
+    && cd /tmp && wget -q https://github.com/php-memcached-dev/php-memcached/archive/v${PHP_MEMCACHED_VERSION}.tar.gz \
+    && tar -zxvf v${PHP_MEMCACHED_VERSION}.tar.gz \
+    && cd php-memcached-${PHP_MEMCACHED_VERSION} && phpize \
+    && ./configure --disable-memcached-sasl --enable-memcached-igbinary && make && make install \
+    && echo 'extension=memcached.so' >> /etc/php7/conf.d/memcached.ini \
     && cd \
     && rm -rf /tmp/* \
     #
