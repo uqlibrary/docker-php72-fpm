@@ -1,4 +1,4 @@
-FROM uqlibrary/alpine:3.8
+FROM uqlibrary/alpine:3.8.1
 
 ENV COMPOSER_VERSION=1.6.5
 ENV XDEBUG_VERSION=2.7.0alpha1
