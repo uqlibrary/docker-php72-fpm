@@ -1,9 +1,9 @@
 FROM uqlibrary/alpine:3.8.1
 
-ENV COMPOSER_VERSION=1.6.5
-ENV XDEBUG_VERSION=2.7.0alpha1
-ENV IGBINARY_VERSION=2.0.7
-ENV NEWRELIC_VERSION=8.1.0.209
+ENV COMPOSER_VERSION=1.7.3
+ENV XDEBUG_VERSION=2.7.0beta1
+ENV IGBINARY_VERSION=2.0.8
+ENV NEWRELIC_VERSION=8.3.0.226
 ENV PHP_MEMCACHED_VERSION=3.0.4
 ENV NR_INSTALL_SILENT=1
 ENV NR_INSTALL_PHPLIST=/usr/bin
@@ -51,7 +51,7 @@ RUN apk add --update --no-cache \
     #
     # Composer
     && curl -sS https://getcomposer.org/installer | php7 -- --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
-    && composer global require "hirak/prestissimo:0.3.7" \
+    && composer global require "hirak/prestissimo:0.3.8" \
     #
     # NewRelic (disabled by default)
     && mkdir /opt && cd /opt \
