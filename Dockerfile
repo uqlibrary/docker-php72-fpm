@@ -1,4 +1,4 @@
-FROM uqlibrary/alpine:3.8.1
+FROM uqlibrary/alpine:3.9
 
 ENV COMPOSER_VERSION=1.7.3
 ENV XDEBUG_VERSION=2.7.0beta1
@@ -54,7 +54,7 @@ RUN apk add --update --no-cache \
     && composer global require "hirak/prestissimo:0.3.8" \
     #
     # NewRelic (disabled by default)
-    && mkdir /opt && cd /opt \
+    && mkdir -p /opt && cd /opt \
     && wget -q https://download.newrelic.com/php_agent/archive/${NEWRELIC_VERSION}/newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz \
     && tar -zxf newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz \
     && rm -f newrelic-php5-${NEWRELIC_VERSION}-linux-musl.tar.gz \
