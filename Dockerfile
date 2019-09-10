@@ -1,9 +1,9 @@
-FROM uqlibrary/alpine:3.9
+FROM uqlibrary/alpine:3.9.4
 
-ENV COMPOSER_VERSION=1.8.4
-ENV XDEBUG_VERSION=2.7.0RC2
-ENV IGBINARY_VERSION=2.0.8
-ENV NEWRELIC_VERSION=8.3.0.226
+ENV COMPOSER_VERSION=1.9.0
+ENV XDEBUG_VERSION=2.8.0beta2
+ENV IGBINARY_VERSION=3.0.1
+ENV NEWRELIC_VERSION=9.1.0.246
 ENV PHP_MEMCACHED_VERSION=3.1.3
 ENV NR_INSTALL_SILENT=1
 ENV NR_INSTALL_PHPLIST=/usr/bin
@@ -35,14 +35,14 @@ RUN apk add --update --no-cache \
     && ./configure --enable-xdebug && make && make install \
     #
     # igbinary
-    && cd /tmp && wget -q https://github.com/igbinary/igbinary/releases/download/${IGBINARY_VERSION}/igbinary-${IGBINARY_VERSION}.tgz \
-    && tar -zxvf igbinary-${IGBINARY_VERSION}.tgz \
+    && cd /tmp && wget -q -O igbinary-${IGBINARY_VERSION}.tar.gz https://github.com/igbinary/igbinary/archive/${IGBINARY_VERSION}.tar.gz \
+    && tar -zxvf igbinary-${IGBINARY_VERSION}.tar.gz \
     && cd igbinary-${IGBINARY_VERSION} && phpize \
     && ./configure CFLAGS="-O2 -g" --enable-igbinary && make && make install \
     && echo 'extension=igbinary.so' >> /etc/php7/conf.d/igbinary.ini \
     # memcache
-    && cd /tmp && wget -q https://github.com/php-memcached-dev/php-memcached/archive/v${PHP_MEMCACHED_VERSION}.tar.gz \
-    && tar -zxvf v${PHP_MEMCACHED_VERSION}.tar.gz \
+    && cd /tmp && wget -q -O php-memcached_v${PHP_MEMCACHED_VERSION}.tar.gz https://github.com/php-memcached-dev/php-memcached/archive/v${PHP_MEMCACHED_VERSION}.tar.gz \
+    && tar -zxvf php-memcached_v${PHP_MEMCACHED_VERSION}.tar.gz \
     && cd php-memcached-${PHP_MEMCACHED_VERSION} && phpize \
     && ./configure --disable-memcached-sasl --enable-memcached-igbinary && make && make install \
     && echo 'extension=memcached.so' >> /etc/php7/conf.d/memcached.ini \
