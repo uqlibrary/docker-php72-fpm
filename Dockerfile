@@ -1,4 +1,4 @@
-FROM uqlibrary/alpine:3.9.4
+FROM uqlibrary/alpine:3.9.6
 
 ENV COMPOSER_VERSION=1.9.1
 ENV PRESTISSIMO_VERSION=0.3.9
